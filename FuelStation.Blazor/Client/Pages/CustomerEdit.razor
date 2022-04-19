@@ -1,0 +1,99 @@
+﻿@page "/customers/edit/{ID:int?}"
+@using FuelStation.Model
+@using FuelStation.Blazor.Shared
+@inject HttpClient httpClient
+@inject NavigationManager navManager
+
+<PageTitle>Fuel Station - Customer</PageTitle>
+
+@if (CustomerItem == null)
+{
+    <p>Loading ...</p>
+}
+else
+{
+    @if (ID == 0)
+    {
+        <h2>Add new customer</h2>
+    }
+    else
+    {
+        <h2>Edit @($"{CustomerItem.Surname} {CustomerItem.Name}")</h2>
+    }
+    @if (ShowingErrorMessages)
+    {
+        <div class="row">
+            <div class="alert alert-info" role="alert">
+                <p>There was an error with the input fields.</p>
+                <p>Please make sure that you have enter all the values correctly.</p>
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-md-8">
+            <label for="customer-card">Card Number</label>
+            <input pattern="A\d+" name="customer-card" class="form-control" @bind="@CustomerItem.CardNumber" placeholder="Customer Card Number" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="customer-surname">Surname</label>
+            <input name="customer-surname" class="form-control" @bind="@CustomerItem.Surname" placeholder="Customer Surname" />
+        </div>
+        <div class="col-md-6">
+            <label for="customer-name">Name</label>
+            <input name="customer-name" class="form-control" @bind="@CustomerItem.Name" placeholder="Customer Name" />
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-6">
+            <button class="btn btn-success" @onclick="OnSave">Save</button>
+            <button class="btn btn-danger" @onclick="OnCancel">Cancel</button>
+        </div>
+    </div>
+
+}
+
+@code {
+    [Parameter] public int? ID { get; set; }
+    private CustomerEditViewModel CustomerItem { get; set; } = new();
+    private bool ShowingErrorMessages = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ID is null)
+        {
+            ID = 0;
+        }
+        CustomerItem = await httpClient.GetFromJsonAsync<CustomerEditViewModel>($"customer/{ID}");
+    }
+
+    protected async Task OnSave()
+    {
+        if (string.IsNullOrEmpty(CustomerItem.CardNumber) ||
+            string.IsNullOrEmpty(CustomerItem.Surname) ||
+            string.IsNullOrEmpty(CustomerItem.Name) ||
+            !CustomerItem.CardNumber.StartsWith("A"))
+        {
+            ShowingErrorMessages = true;
+            return;
+        }
+
+        HttpResponseMessage response;
+        if (ID == 0)
+        {
+            response = await httpClient.PostAsJsonAsync("customer", CustomerItem);
+        }
+        else
+        {
+            response = await httpClient.PutAsJsonAsync("customer", CustomerItem);
+        }
+        response.EnsureSuccessStatusCode();
+        navManager.NavigateTo("customers");
+    }
+
+    protected void OnCancel()
+    {
+        navManager.NavigateTo("customers");
+    }
+}

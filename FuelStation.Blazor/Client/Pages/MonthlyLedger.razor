@@ -1,0 +1,64 @@
+﻿@page "/monthlyledger"
+@inject HttpClient httpClient
+@inject NavigationManager navManager
+@using FuelStation.Blazor.Shared
+
+<PageTitle>Fuel Station - Monthly Ledger</PageTitle>
+
+<h2>Monthly Ledger</h2>
+
+<div class="row justify-content-start">
+    <div class="col-md-4">
+        <input type="date" class="form-control" @bind="LedgerDate" />
+    </div>
+    <div class="col-md-4">
+        <button class="btn btn-primary" @onclick="GetLedger">Get Monthly Ledger</button>
+    </div>
+
+</div>
+@if (isLoading)
+{
+    <p> Loading...</p>
+}
+else
+{
+    <div class="table-responsive-md">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Month</th>
+                    <th>Income</th>
+                    <th>Expenses</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@ledger.Year</td>
+                    <td>@ledger.Month</td>
+                    <td>@ledger.Income</td>
+                    <td>@ledger.Expenses</td>
+                    <td>@ledger.Total</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private MonthlyLedgerViewModel ledger;
+    private DateTime LedgerDate { get; set; } = DateTime.Now;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ledger = await httpClient.GetFromJsonAsync<MonthlyLedgerViewModel>($"utility/ledger/{LedgerDate.Year}/{LedgerDate.Month}");
+        isLoading = false;
+    }
+
+    protected async Task GetLedger()
+    {
+        ledger = await httpClient.GetFromJsonAsync<MonthlyLedgerViewModel>($"utility/ledger/{LedgerDate.Year}/{LedgerDate.Month}");
+    }
+}

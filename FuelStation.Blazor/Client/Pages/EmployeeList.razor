@@ -1,0 +1,91 @@
+﻿@page "/employees"
+@inject HttpClient httpClient
+@inject NavigationManager navManager
+@using FuelStation.Blazor.Shared
+
+<PageTitle>Fuel Station - Employees</PageTitle>
+
+<h2>Employees</h2>
+
+<div class=row>
+
+    <button class="btn btn-primary w-25" @onclick="AddItem">Add Employee</button>
+
+</div>
+@if (isLoading)
+{
+    <p> Loading...</p>
+}
+else
+{
+    <div class="table-responsive-md">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Surname</th>
+                    <th>Name</th>
+                    <th>Employee Type</th>
+                    <th>Salary Per Month</th>
+                    <th>Date Started</th>
+                    <th>Date Ended</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var employee in employees)
+                {
+                    <tr>
+                        <td>@employee.Surname</td>
+                        <td>@employee.Name</td>
+                        <td>@employee.EmployeeType</td>
+                        <td>@employee.SalaryPerMonth</td>
+                        <td>@DateOnly.FromDateTime(employee.HireDateStart)</td>
+                        <td>
+                            @if (employee.HireDateEnd is not null)
+                            {
+                                @DateOnly.FromDateTime((DateTime)employee.HireDateEnd)
+                            }
+                        </td>
+                        <td>
+                            <button class="btn btn-warning" @onclick="() => EditItem(employee)">Edit</button>
+                            <button class="btn btn-danger" @onclick="() => DeleteItem(employee)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<EmployeeListViewModel> employees = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadItemsFromServer();
+        isLoading = false;
+    }
+
+    private async Task LoadItemsFromServer()
+    {
+        employees = await httpClient.GetFromJsonAsync<List<EmployeeListViewModel>>("employee");
+    }
+
+    protected void AddItem()
+    {
+        navManager.NavigateTo("/employees/edit");
+    }
+
+    protected async Task DeleteItem(EmployeeListViewModel employee)
+    {
+        var response = await httpClient.DeleteAsync($"employee/{employee.ID}");
+        response.EnsureSuccessStatusCode();
+        await LoadItemsFromServer();
+    }
+
+    protected void EditItem(EmployeeListViewModel employee)
+    {
+        navManager.NavigateTo($"/employees/edit/{employee.ID}");
+    }
+}
