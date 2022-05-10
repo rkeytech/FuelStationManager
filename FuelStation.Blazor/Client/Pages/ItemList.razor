@@ -18,36 +18,24 @@
 }
 else
 {
-    <div class="table-responsive-md">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Code</th>
-                    <th>Descirption</th>
-                    <th>Cost</th>
-                    <th>Price</th>
-                    <th>Item Type</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in items)
-                {
-                    <tr>
-                        <td>@item.Code</td>
-                        <td>@item.Description</td>
-                        <td>@item.Cost</td>
-                        <td>@item.Price</td>
-                        <td>@item.ItemType</td>
-                        <td>
-                            <button class="btn btn-warning" @onclick="() => EditItem(item)">Edit</button>
-                            <button class="btn btn-danger" @onclick="() => DeleteItem(item)">Delete</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    <EntityList Items="items" Context="item"
+                OnClickDelete="(ItemListViewModel item) => DeleteItem(item)" 
+                OnClickEdit="(ItemListViewModel item) => EditItem(item)">
+        <TableHeader>
+            <th>Code</th>
+            <th>Description</th>
+            <th>Cost</th>
+            <th>Price</th>
+            <th>Item Type</th>
+        </TableHeader>
+        <RowTemplate>
+            <td>@item.Code</td>
+            <td>@item.Description</td>
+            <td>@item.Cost</td>
+            <td>@item.Price</td>
+            <td>@item.ItemType</td>
+        </RowTemplate>
+    </EntityList>
 }
 
 @code {

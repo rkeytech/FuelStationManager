@@ -18,32 +18,20 @@
 }
 else
 {
-    <div class="table-responsive-md">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Surname</th>
-                    <th>Name</th>
-                    <th>Card Number</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var customer in customers)
-                {
-                    <tr>
-                        <td>@customer.Surname</td>
-                        <td>@customer.Name</td>
-                        <td>@customer.CardNumber</td>
-                        <td>
-                            <button class="btn btn-warning" @onclick="() => EditItem(customer)">Edit</button>
-                            <button class="btn btn-danger" @onclick="() => DeleteItem(customer)">Delete</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    <EntityList Items=@customers Context="customer" 
+                OnClickDelete="(CustomerListViewModel customer) => DeleteItem(customer)" 
+                OnClickEdit="(CustomerListViewModel customer) => EditItem(customer)">
+        <TableHeader>
+            <th>Surname</th>
+            <th>Name</th>
+            <th>Card Number</th>
+        </TableHeader>
+        <RowTemplate>
+            <td>@customer.Surname</td>
+            <td>@customer.Name</td>
+            <td>@customer.CardNumber</td>
+        </RowTemplate>
+    </EntityList>
 }
 
 @code {

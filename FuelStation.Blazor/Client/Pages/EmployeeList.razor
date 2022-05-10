@@ -18,43 +18,31 @@
 }
 else
 {
-    <div class="table-responsive-md">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Surname</th>
-                    <th>Name</th>
-                    <th>Employee Type</th>
-                    <th>Salary Per Month</th>
-                    <th>Date Started</th>
-                    <th>Date Ended</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var employee in employees)
+    <EntityList Items=@employees Context="employee" 
+                OnClickDelete="(EmployeeListViewModel employee) => DeleteItem(employee)" 
+                OnClickEdit="(EmployeeListViewModel employee) => EditItem(employee)">
+        <TableHeader>
+            <th>Surname</th>
+            <th>Name</th>
+            <th>Employee Type</th>
+            <th>Salary Per Month</th>
+            <th>Date Started</th>
+            <th>Date Ended</th>
+        </TableHeader>
+        <RowTemplate>
+            <td>@employee.Surname</td>
+            <td>@employee.Name</td>
+            <td>@employee.EmployeeType</td>
+            <td>@employee.SalaryPerMonth</td>
+            <td>@DateOnly.FromDateTime(employee.HireDateStart)</td>
+            <td>
+                @if (employee.HireDateEnd is not null)
                 {
-                    <tr>
-                        <td>@employee.Surname</td>
-                        <td>@employee.Name</td>
-                        <td>@employee.EmployeeType</td>
-                        <td>@employee.SalaryPerMonth</td>
-                        <td>@DateOnly.FromDateTime(employee.HireDateStart)</td>
-                        <td>
-                            @if (employee.HireDateEnd is not null)
-                            {
-                                @DateOnly.FromDateTime((DateTime)employee.HireDateEnd)
-                            }
-                        </td>
-                        <td>
-                            <button class="btn btn-warning" @onclick="() => EditItem(employee)">Edit</button>
-                            <button class="btn btn-danger" @onclick="() => DeleteItem(employee)">Delete</button>
-                        </td>
-                    </tr>
+                    @DateOnly.FromDateTime((DateTime)employee.HireDateEnd)
                 }
-            </tbody>
-        </table>
-    </div>
+            </td>
+        </RowTemplate>
+    </EntityList>
 }
 
 @code {
