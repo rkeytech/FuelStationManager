@@ -1,7 +1,6 @@
 ﻿@page "/customers"
-@inject HttpClient httpClient
-@inject NavigationManager navManager
-@using FuelStation.Blazor.Shared
+@inject HttpClient ReqClient
+@inject NavigationManager NavManager
 
 <PageTitle>Fuel Station - Customers</PageTitle>
 
@@ -12,13 +11,13 @@
     <button class="btn btn-primary w-25" @onclick="AddItem">Add Customer</button>
 
 </div>
-@if (isLoading)
+@if (_isLoading)
 {
     <p> Loading...</p>
 }
 else
 {
-    <EntityList Items=@customers Context="customer" 
+    <EntityList Items=@_customers Context="customer" 
                 OnClickDelete="(CustomerListViewModel customer) => DeleteItem(customer)" 
                 OnClickEdit="(CustomerListViewModel customer) => EditItem(customer)">
         <TableHeader>
@@ -32,37 +31,4 @@ else
             <td>@customer.CardNumber</td>
         </RowTemplate>
     </EntityList>
-}
-
-@code {
-    private List<CustomerListViewModel> customers = new();
-    private bool isLoading = true;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadItemsFromServer();
-        isLoading = false;
-    }
-
-    private async Task LoadItemsFromServer()
-    {
-        customers = await httpClient.GetFromJsonAsync<List<CustomerListViewModel>>("customer");
-    }
-
-    protected void AddItem()
-    {
-        navManager.NavigateTo("/customers/edit");
-    }
-
-    protected async Task DeleteItem(CustomerListViewModel customer)
-    {
-        var response = await httpClient.DeleteAsync($"customer/{customer.ID}");
-        response.EnsureSuccessStatusCode();
-        await LoadItemsFromServer();
-    }
-
-    protected void EditItem(CustomerListViewModel customer)
-    {
-        navManager.NavigateTo($"/customers/edit/{customer.ID}");
-    }
 }

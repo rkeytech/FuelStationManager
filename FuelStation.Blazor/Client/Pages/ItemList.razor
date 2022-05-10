@@ -1,7 +1,6 @@
 ﻿@page "/items"
-@inject HttpClient httpClient
-@inject NavigationManager navManager
-@using FuelStation.Blazor.Shared
+@inject HttpClient ReqClient
+@inject NavigationManager NavManager
 
 <PageTitle>Fuel Station - Items</PageTitle>
 
@@ -12,13 +11,13 @@
     <button class="btn btn-primary w-25" @onclick="AddItem">Add Item</button>
 
 </div>
-@if (isLoading)
+@if (_isLoading)
 {
     <p> Loading...</p>
 }
 else
 {
-    <EntityList Items="items" Context="item"
+    <EntityList Items="_items" Context="item"
                 OnClickDelete="(ItemListViewModel item) => DeleteItem(item)" 
                 OnClickEdit="(ItemListViewModel item) => EditItem(item)">
         <TableHeader>
@@ -36,37 +35,4 @@ else
             <td>@item.ItemType</td>
         </RowTemplate>
     </EntityList>
-}
-
-@code {
-    private List<ItemListViewModel> items = new();
-    private bool isLoading = true;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadItemsFromServer();
-        isLoading = false;
-    }
-
-    private async Task LoadItemsFromServer()
-    {
-        items = await httpClient.GetFromJsonAsync<List<ItemListViewModel>>("item");
-    }
-
-    protected void AddItem()
-    {
-        navManager.NavigateTo("/items/edit");
-    }
-
-    protected async Task DeleteItem(ItemListViewModel item)
-    {
-        var response = await httpClient.DeleteAsync($"item/{item.ID}");
-        response.EnsureSuccessStatusCode();
-        await LoadItemsFromServer();
-    }
-
-    protected void EditItem(ItemListViewModel item)
-    {
-        navManager.NavigateTo($"/items/edit/{item.ID}");
-    }
 }

@@ -1,7 +1,7 @@
 ﻿@page "/login"
-@inject HttpClient httpClient
-@inject NavigationManager navManager
-@inject IJSRuntime jsRuntime
+@inject HttpClient ReqClient
+@inject NavigationManager NavManager
+@inject IJSRuntime JsRuntime
 
 <h3>Login</h3>
 
@@ -24,22 +24,3 @@
         </div>
     </div>
 </div>
-
-
-@code {
-    private UserAuthenticatedViewModel user { get; set; }
-    private string Username { get; set; }
-    private string Password { get; set; }
-
-    protected async Task OnLogin()
-    {
-        user = await httpClient.GetFromJsonAsync<UserAuthenticatedViewModel>($"utility/auth/{Username}/{Password}");
-        if (user.IsAuthed)
-        {
-            await jsRuntime.InvokeAsync<string>("localStorage.setItem", "username", user.Username);
-            await jsRuntime.InvokeAsync<string>("localStorage.setItem", "role", user.EmployeeType);
-            await jsRuntime.InvokeAsync<string>("localStorage.setItem", "isAuth", true);
-            navManager.NavigateTo("/", true);
-        }
-    }
-}

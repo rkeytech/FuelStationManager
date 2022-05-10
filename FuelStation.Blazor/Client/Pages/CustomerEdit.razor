@@ -1,6 +1,4 @@
 ﻿@page "/customers/edit/{ID:int?}"
-@using FuelStation.Model
-@using FuelStation.Blazor.Shared
 @inject HttpClient ReqClient
 @inject NavigationManager NavManager
 
@@ -52,45 +50,4 @@ else
         </div>
     </div>
 
-}
-
-@code {
-    [Parameter] public int? Id { get; set; }
-    private CustomerEditViewModel? CustomerItem { get; set; } = new();
-    private bool _showingErrorMessages = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        Id ??= 0;
-        CustomerItem = await ReqClient.GetFromJsonAsync<CustomerEditViewModel>($"customer/{Id}");
-    }
-
-    protected async Task OnSave()
-    {
-        if (CustomerItem != null && (string.IsNullOrEmpty(CustomerItem.CardNumber) ||
-                                     string.IsNullOrEmpty(CustomerItem.Surname) ||
-                                     string.IsNullOrEmpty(CustomerItem.Name) ||
-                                     !CustomerItem.CardNumber.StartsWith("A")))
-        {
-            _showingErrorMessages = true;
-            return;
-        }
-
-        HttpResponseMessage response;
-        if (Id == 0)
-        {
-            response = await ReqClient.PostAsJsonAsync("customer", CustomerItem);
-        }
-        else
-        {
-            response = await ReqClient.PutAsJsonAsync("customer", CustomerItem);
-        }
-        response.EnsureSuccessStatusCode();
-        NavManager.NavigateTo("customers");
-    }
-
-    protected void OnCancel()
-    {
-        NavManager.NavigateTo("customers");
-    }
 }
