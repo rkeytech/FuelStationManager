@@ -1,18 +1,18 @@
 ﻿@page "/customers/edit/{ID:int?}"
 @using FuelStation.Model
 @using FuelStation.Blazor.Shared
-@inject HttpClient httpClient
-@inject NavigationManager navManager
+@inject HttpClient ReqClient
+@inject NavigationManager NavManager
 
 <PageTitle>Fuel Station - Customer</PageTitle>
 
-@if (CustomerItem == null)
+@if (CustomerItem is null)
 {
     <p>Loading ...</p>
 }
 else
 {
-    @if (ID == 0)
+    @if (Id == 0)
     {
         <h2>Add new customer</h2>
     }
@@ -20,7 +20,7 @@ else
     {
         <h2>Edit @($"{CustomerItem.Surname} {CustomerItem.Name}")</h2>
     }
-    @if (ShowingErrorMessages)
+    @if (_showingErrorMessages)
     {
         <div class="row">
             <div class="alert alert-info" role="alert">
@@ -32,17 +32,17 @@ else
     <div class="row">
         <div class="col-md-8">
             <label for="customer-card">Card Number</label>
-            <input pattern="A\d+" name="customer-card" class="form-control" @bind="@CustomerItem.CardNumber" placeholder="Customer Card Number" />
+            <input id="customer-card" pattern="A\d+" name="customer-card" class="form-control" @bind="@CustomerItem.CardNumber" placeholder="Customer Card Number" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <label for="customer-surname">Surname</label>
-            <input name="customer-surname" class="form-control" @bind="@CustomerItem.Surname" placeholder="Customer Surname" />
+            <input id="customer-surname" name="customer-surname" class="form-control" @bind="@CustomerItem.Surname" placeholder="Customer Surname" />
         </div>
         <div class="col-md-6">
             <label for="customer-name">Name</label>
-            <input name="customer-name" class="form-control" @bind="@CustomerItem.Name" placeholder="Customer Name" />
+            <input id="customer-name" name="customer-name" class="form-control" @bind="@CustomerItem.Name" placeholder="Customer Name" />
         </div>
     </div>
     <div class="row mt-2">
@@ -55,45 +55,42 @@ else
 }
 
 @code {
-    [Parameter] public int? ID { get; set; }
-    private CustomerEditViewModel CustomerItem { get; set; } = new();
-    private bool ShowingErrorMessages = false;
+    [Parameter] public int? Id { get; set; }
+    private CustomerEditViewModel? CustomerItem { get; set; } = new();
+    private bool _showingErrorMessages = false;
 
     protected override async Task OnInitializedAsync()
     {
-        if (ID is null)
-        {
-            ID = 0;
-        }
-        CustomerItem = await httpClient.GetFromJsonAsync<CustomerEditViewModel>($"customer/{ID}");
+        Id ??= 0;
+        CustomerItem = await ReqClient.GetFromJsonAsync<CustomerEditViewModel>($"customer/{Id}");
     }
 
     protected async Task OnSave()
     {
-        if (string.IsNullOrEmpty(CustomerItem.CardNumber) ||
-            string.IsNullOrEmpty(CustomerItem.Surname) ||
-            string.IsNullOrEmpty(CustomerItem.Name) ||
-            !CustomerItem.CardNumber.StartsWith("A"))
+        if (CustomerItem != null && (string.IsNullOrEmpty(CustomerItem.CardNumber) ||
+                                     string.IsNullOrEmpty(CustomerItem.Surname) ||
+                                     string.IsNullOrEmpty(CustomerItem.Name) ||
+                                     !CustomerItem.CardNumber.StartsWith("A")))
         {
-            ShowingErrorMessages = true;
+            _showingErrorMessages = true;
             return;
         }
 
         HttpResponseMessage response;
-        if (ID == 0)
+        if (Id == 0)
         {
-            response = await httpClient.PostAsJsonAsync("customer", CustomerItem);
+            response = await ReqClient.PostAsJsonAsync("customer", CustomerItem);
         }
         else
         {
-            response = await httpClient.PutAsJsonAsync("customer", CustomerItem);
+            response = await ReqClient.PutAsJsonAsync("customer", CustomerItem);
         }
         response.EnsureSuccessStatusCode();
-        navManager.NavigateTo("customers");
+        NavManager.NavigateTo("customers");
     }
 
     protected void OnCancel()
     {
-        navManager.NavigateTo("customers");
+        NavManager.NavigateTo("customers");
     }
 }

@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuelStation.EF", "FuelStati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuelStation.Win", "FuelStation.Win\FuelStation.Win.csproj", "{7C466DF4-146B-4C43-A399-7B7BC3899F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuelStation.Tests", "FuelStation.Tests\FuelStation.Tests.csproj", "{2734BB81-566E-46D3-B274-6228178D6346}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuelStation.Tests", "FuelStation.Tests\FuelStation.Tests.csproj", "{2734BB81-566E-46D3-B274-6228178D6346}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
