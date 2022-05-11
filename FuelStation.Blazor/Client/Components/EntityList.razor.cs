@@ -8,6 +8,8 @@ public partial class EntityList<TEntity>
     [Parameter]
     public RenderFragment? TableHeader { get; set; }
     [Parameter]
+    public IReadOnlyList<Tuple<string, string>>? Headers { get; set; }
+    [Parameter]
     public RenderFragment<TEntity>? RowTemplate { get; set; }
     [Parameter]
     public IReadOnlyList<TEntity>? Items { get; set; }

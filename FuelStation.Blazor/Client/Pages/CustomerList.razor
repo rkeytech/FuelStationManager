@@ -6,7 +6,7 @@
 
 <h2>Customers</h2>
 
-<div class=row>
+<div class="row">
 
     <button class="btn btn-primary w-25" @onclick="AddItem">Add Customer</button>
 
@@ -17,10 +17,10 @@
 }
 else
 {
-    <EntityList Items=@_customers Context="customer" 
+    <EntityList Items=@_customers Context="customer" Headers=@_tableHeaders
                 OnClickDelete="(CustomerListViewModel customer) => DeleteItem(customer)" 
                 OnClickEdit="(CustomerListViewModel customer) => EditItem(customer)">
-        <TableHeader>
+       @* <TableHeader>
             <th>Surname</th>
             <th>Name</th>
             <th>Card Number</th>
@@ -29,6 +29,6 @@ else
             <td>@customer.Surname</td>
             <td>@customer.Name</td>
             <td>@customer.CardNumber</td>
-        </RowTemplate>
+        </RowTemplate>*@
     </EntityList>
 }

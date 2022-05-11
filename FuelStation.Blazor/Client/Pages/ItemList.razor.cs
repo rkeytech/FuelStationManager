@@ -7,6 +7,14 @@ public partial class ItemList
 {
     private List<ItemListViewModel>? _items = new();
     private bool _isLoading = true;
+    private readonly List<Tuple<string, string>> _tableHeaders = new()
+    {
+        new Tuple<string, string>("Code", "Code"),
+        new Tuple<string, string>("Description", "Description"),
+        new Tuple<string, string>("Cost", "Cost"),
+        new Tuple<string, string>("Price", "Price"),
+        new Tuple<string, string>("ItemType", "ItemType"),
+    };
 
     protected override async Task OnInitializedAsync()
     {

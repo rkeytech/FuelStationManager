@@ -7,6 +7,12 @@ public partial class CustomerList
 {
     private List<CustomerListViewModel>? _customers = new();
     private bool _isLoading = true;
+    private readonly List<Tuple<string, string>> _tableHeaders = new()
+    {
+        new Tuple<string, string>("Surname", "Surname"),
+        new Tuple<string, string>("Name", "Name"),
+        new Tuple<string, string>("CardNumber", "CardNumber")
+    };
 
     protected override async Task OnInitializedAsync()
     {

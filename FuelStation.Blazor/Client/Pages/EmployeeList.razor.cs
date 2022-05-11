@@ -8,6 +8,16 @@ public partial class EmployeeList
     private List<EmployeeListViewModel>? _employees = new();
     private bool _isLoading = true;
 
+    private readonly List<Tuple<string, string>> _tableHeaders = new()
+    {
+        new Tuple<string, string>("Surname", "Surname"),
+        new Tuple<string, string>("Name", "Name"),
+        new Tuple<string, string>("Employee Type", "EmployeeType"),
+        new Tuple<string, string>("Salary Per Month", "SalaryPerMonth"),
+        new Tuple<string, string>("Date Started", "HireDateStart"),
+        new Tuple<string, string>("Date Ended", "HireDateEnd"),
+    };
+
     protected override async Task OnInitializedAsync()
     {
         await LoadItemsFromServer();

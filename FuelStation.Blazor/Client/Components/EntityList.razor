@@ -1,27 +1,49 @@
 ﻿@typeparam TEntity
 
 <div class="table-responsive-md">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                @TableHeader
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Items)
-            {
-                if (RowTemplate is not null)
+    @if (Headers is not null &&
+         Items is not null)
+    {
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    @*@TableHeader*@
+                    @*@foreach (var header in GetItemProperties())
+                    {
+                        <th>@header</th>
+                    }*@
+                    @foreach (var header in Headers)
+                    {
+                        <th>@header.Item1</th>
+                    }
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Items)
                 {
                     <tr>
-                        @RowTemplate(item)
+                        @*@RowTemplate(item)*@
+                        @*@foreach (var property in GetItemProperties())
+                        {
+                            <td>
+                                @if (item != null)
+                                {
+                                    @item.GetType().GetProperty(property)
+                                }
+                            </td>
+                        }*@
+                        @foreach (var header in Headers)
+                        {
+                            <td>@item?.GetType().GetProperty(header.Item2)?.GetValue(item)</td>
+                        }
                         <td>
                             <button class="btn btn-warning" @onclick="() => EditClick(item)">Edit</button>
                             <button class="btn btn-danger" @onclick="() => DeleteClick(item)">Delete</button>
                         </td>
                     </tr>
                 }
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    }
 </div>
