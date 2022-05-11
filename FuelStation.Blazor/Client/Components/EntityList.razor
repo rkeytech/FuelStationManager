@@ -25,29 +25,3 @@
         </tbody>
     </table>
 </div>
-
-@code
-{
-    [Parameter]
-    public RenderFragment? TableHeader { get; set; }
-    [Parameter]
-    public RenderFragment<TEntity>? RowTemplate { get; set; }
-    [Parameter]
-    public IReadOnlyList<TEntity> Items { get; set; }
-    [Parameter]
-    public EventCallback<TEntity> OnClickDelete { get; set; }
-    [Parameter]
-    public EventCallback<TEntity> OnClickEdit { get; set; }
-
-    protected async Task DeleteClick(TEntity entity)
-    {
-        await OnClickDelete.InvokeAsync(entity);
-    }
-
-    protected async Task EditClick(TEntity entity)
-    {
-        await OnClickEdit.InvokeAsync(entity);
-    }
-
-
-}
