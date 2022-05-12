@@ -28,9 +28,8 @@ public partial class EntityList<TEntity>
         return OnClickEdit.InvokeAsync(entity);
     }
 
-    private IEnumerable<string> GetItemProperties()
+    private List<string> GetItemProperties()
     {
-        var t = typeof(TEntity).GetProperties(BindingFlags.Public).ToList().Select(pr => pr.Name);
-        return t;
+        return typeof(TEntity).GetProperties().Select(pr => pr.Name).ToList();
     }
 }

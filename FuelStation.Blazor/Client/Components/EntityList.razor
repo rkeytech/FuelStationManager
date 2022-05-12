@@ -2,16 +2,21 @@
 
 <div class="table-responsive-md">
     @if (Headers is not null &&
-         Items is not null)
+    Items is not null)
     {
         <table class="table table-hover">
             <thead>
                 <tr>
+                    <!-- Case RenderFragment-->
                     @*@TableHeader*@
-                    @*@foreach (var header in GetItemProperties())
-                    {
+
+                    <!-- Case Reflection-->
+                    @*@foreach (var header in GetItemProperties().Where(pr => pr != "ID"))
+                        {
                         <th>@header</th>
-                    }*@
+                        }*@
+
+                    <!-- Case Headers List-->
                     @foreach (var header in Headers)
                     {
                         <th>@header.Item1</th>
@@ -23,16 +28,22 @@
                 @foreach (var item in Items)
                 {
                     <tr>
+                        <!-- Case RenderFragment-->
                         @*@RowTemplate(item)*@
-                        @*@foreach (var property in GetItemProperties())
-                        {
+
+                        <!-- Case Reflection-->
+                        @*@foreach (var property in GetItemProperties().Where(pr => pr != "ID"))
+                            {
                             <td>
-                                @if (item != null)
-                                {
-                                    @item.GetType().GetProperty(property)
-                                }
+                            @if (item != null)
+                            {
+                            @item.GetType().GetProperty(property)?.GetValue(item)
+                            ;
+                            }
                             </td>
-                        }*@
+                            }*@
+
+                        <!-- Case Headers List-->
                         @foreach (var header in Headers)
                         {
                             <td>@item?.GetType().GetProperty(header.Item2)?.GetValue(item)</td>
