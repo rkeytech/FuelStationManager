@@ -2,9 +2,13 @@
 
 using System.Net.Http.Json;
 using Blazor.Shared;
+using Microsoft.AspNetCore.Components;
+using Shared;
 
 public partial class EmployeeList
 {
+    [CascadingParameter]
+    public MainLayout MyLayout { get; set; } = null!;
     private List<EmployeeListViewModel>? _employees = new();
     private bool _isLoading = true;
 
@@ -20,6 +24,7 @@ public partial class EmployeeList
 
     protected override async Task OnInitializedAsync()
     {
+        MyLayout.UpdateTitle("Employees");
         await LoadItemsFromServer();
         _isLoading = false;
     }

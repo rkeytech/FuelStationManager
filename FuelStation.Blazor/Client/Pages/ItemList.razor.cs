@@ -2,9 +2,13 @@
 
 using System.Net.Http.Json;
 using Blazor.Shared;
+using Microsoft.AspNetCore.Components;
+using Shared;
 
 public partial class ItemList
 {
+    [CascadingParameter]
+    public MainLayout MyLayout { get; set; } = null!;
     private List<ItemListViewModel>? _items = new();
     private bool _isLoading = true;
     private readonly List<Tuple<string, string>> _tableHeaders = new()
@@ -18,6 +22,7 @@ public partial class ItemList
 
     protected override async Task OnInitializedAsync()
     {
+        MyLayout.UpdateTitle("Items");
         await LoadItemsFromServer();
         _isLoading = false;
     }

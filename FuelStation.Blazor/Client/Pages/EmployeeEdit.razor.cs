@@ -4,9 +4,12 @@ using System.Net.Http.Json;
 using FuelStation.Blazor.Shared;
 using Microsoft.AspNetCore.Components;
 using Model;
+using Shared;
 
 public partial class EmployeeEdit
 {
+    [CascadingParameter]
+    public MainLayout MyLayout { get; set; } = null!;
     [Parameter] public int? Id { get; set; }
     private EmployeeEditViewModel? EmployeeItem { get; set; } = new();
     private int EmployeeType { get; set; } = -1;
@@ -22,6 +25,8 @@ public partial class EmployeeEdit
         {
             EmployeeType = (int)EmployeeItem.EmployeeType;
         }
+
+        MyLayout.UpdateTitle(Id == 0 ? "Add new employee" : $"Edit {EmployeeItem?.Surname} {EmployeeItem?.Name}");
     }
 
     protected async Task OnSave()

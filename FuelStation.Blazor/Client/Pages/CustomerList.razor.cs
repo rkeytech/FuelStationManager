@@ -2,9 +2,13 @@
 
 using System.Net.Http.Json;
 using FuelStation.Blazor.Shared;
+using Microsoft.AspNetCore.Components;
+using Shared;
 
 public partial class CustomerList
 {
+    [CascadingParameter] 
+    public MainLayout MyLayout { get; set; } = null!;
     private List<CustomerListViewModel>? _customers = new();
     private bool _isLoading = true;
     private readonly List<Tuple<string, string>> _tableHeaders = new()
@@ -16,6 +20,7 @@ public partial class CustomerList
 
     protected override async Task OnInitializedAsync()
     {
+        MyLayout.UpdateTitle("Customers");
         await LoadItemsFromServer();
         _isLoading = false;
     }

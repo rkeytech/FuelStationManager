@@ -3,9 +3,12 @@
 using System.Net.Http.Json;
 using FuelStation.Blazor.Shared;
 using Microsoft.AspNetCore.Components;
+using Shared;
 
 public partial class CustomerEdit
 {
+    [CascadingParameter]
+    public MainLayout MyLayout { get; set; } = null!;
     [Parameter] public int? Id { get; set; }
     private CustomerEditViewModel? CustomerItem { get; set; } = new();
     private bool _showingErrorMessages;
@@ -14,6 +17,7 @@ public partial class CustomerEdit
     {
         Id ??= 0;
         CustomerItem = await ReqClient.GetFromJsonAsync<CustomerEditViewModel>($"customer/{Id}");
+        MyLayout.UpdateTitle(Id == 0 ? "Add new customer" : $"Edit {CustomerItem?.Surname} {CustomerItem?.Name}");
     }
 
     protected async Task OnSave()

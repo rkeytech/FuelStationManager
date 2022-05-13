@@ -5,9 +5,23 @@
         <NavMenu />
     </div>
 
-    <main>
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+    <CascadingValue Value="this">
+        <main>
+            <article class="content px-4">
+                <h2>@MyPageTitle</h2>
+                @Body
+            </article>
+        </main>
+    </CascadingValue>
 </div>
+
+@code
+{
+    public string MyPageTitle { get; set; } = string.Empty;
+
+    public void UpdateTitle(string title)
+    {
+        MyPageTitle = title;
+        StateHasChanged();
+    }
+}

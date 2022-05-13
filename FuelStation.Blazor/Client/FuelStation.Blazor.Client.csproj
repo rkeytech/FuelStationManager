@@ -74,4 +74,8 @@
 		<ProjectReference Include="..\Shared\FuelStation.Blazor.Shared.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Layouts\" />
+	</ItemGroup>
+
 </Project>

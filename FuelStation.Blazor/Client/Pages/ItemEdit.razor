@@ -11,14 +11,14 @@
 }
 else
 {
-    @if (Id == 0)
+    @*@if (Id == 0)
     {
         <h2>Add new item</h2>
     }
     else
     {
         <h2>Edit @($"{ItemItem.Description}")</h2>
-    }
+    }*@
     @if (_showingErrorMessages)
     {
         <div class="row">

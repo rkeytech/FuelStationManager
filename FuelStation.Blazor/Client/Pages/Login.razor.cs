@@ -2,13 +2,22 @@
 
 using System.Net.Http.Json;
 using Blazor.Shared;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Shared;
 
 public partial class Login
 {
+    [CascadingParameter]
+    public MainLayout MyLayout { get; set; } = null!;
     private UserAuthenticatedViewModel? User { get; set; }
     private string? Username { get; set; }
     private string? Password { get; set; }
+
+    protected override void OnInitialized()
+    {
+        MyLayout.UpdateTitle("Login");
+    }
 
     protected async Task OnLogin()
     {

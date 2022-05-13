@@ -4,9 +4,12 @@ using System.Net.Http.Json;
 using Blazor.Shared;
 using Microsoft.AspNetCore.Components;
 using Model;
+using Shared;
 
 public partial class ItemEdit
 {
+    [CascadingParameter]
+    public MainLayout MyLayout { get; set; } = null!;
     [Parameter] public int? Id { get; set; }
     private ItemEditViewModel? ItemItem { get; set; } = new();
     private int ItemType { get; set; } = -1;
@@ -22,6 +25,8 @@ public partial class ItemEdit
         {
             ItemType = (int)ItemItem.ItemType;
         }
+        
+        MyLayout.UpdateTitle(Id == 0 ? "Add new item" : $"Edit {ItemItem?.Description}");
     }
 
     protected async Task OnSave()
