@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -72,7 +72,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\FuelStation.Model\FuelStation.Model.csproj" />
+	  <ProjectReference Include="..\FuelStation.Blazor\Server\FuelStation.Blazor.Server.csproj" />
+	  <ProjectReference Include="..\FuelStation.Model\FuelStation.Model.csproj" />
 	</ItemGroup>
 
 </Project>
