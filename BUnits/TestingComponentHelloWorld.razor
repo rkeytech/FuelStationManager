@@ -1,0 +1,17 @@
+﻿@code {
+
+    [Fact]
+    public void TestingComponentRendersCorrectly()
+    {
+        // Arrange
+        using var ctx = new TestContext();
+
+        // Act
+        var cut = ctx.Render(@<HelloWorld />);
+
+        // Assert
+        cut.MarkupMatches(@<h1>TestingMarkUp</h1>);
+
+    }
+
+}

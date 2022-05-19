@@ -1,0 +1,49 @@
+﻿@code {
+
+    [Fact]
+    public void TestingComponentRendersCorrectly()
+    {
+        // Arrange
+        using var ctx = new TestContext();
+
+        // Create Mock List of Customers
+        var items = new List<CustomerListViewModel>()
+        {
+            new CustomerListViewModel()
+            {
+                ID = 1,
+                Name = "Customer1",
+                CardNumber = "A0102d12d",
+                Surname = "SurCustomer1"
+            },
+            new CustomerListViewModel()
+            {
+                ID = 2,
+                Name = "Customer2",
+                CardNumber = "A0112312d",
+                Surname = "SurCustomer2"
+            }
+        };
+
+        // Create a list of tuples for headers
+        var tableHeaders = new List<Tuple<string, string>>()
+        {
+            new Tuple<string, string>("Surname", "Surname"),
+            new Tuple<string, string>("Name", "Name"),
+            new Tuple<string, string>("CardNumber", "CardNumber")
+        };
+
+        // Act
+        var cut = ctx.Render(@<EntityList Items="items" Headers="tableHeaders"/>);
+        var tableRows = cut.FindAll("tbody>tr");
+        var tableHeaderCells = cut.FindAll("th");
+
+        // Assert
+        Assert.Equal(2, tableRows.Count);
+        Assert.Equal(tableHeaders.Count + 1, tableHeaderCells.Count);
+        var expectedCells = @"<th diff:regex>[a-zA-Z]*</th>";
+        tableHeaderCells.MarkupMatches(expectedCells);
+        
+    }
+
+}
