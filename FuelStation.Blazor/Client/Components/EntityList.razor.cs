@@ -17,6 +17,7 @@ public partial class EntityList<TEntity>
     public EventCallback<TEntity> OnClickDelete { get; set; }
     [Parameter]
     public EventCallback<TEntity> OnClickEdit { get; set; }
+    
 
     protected Task DeleteClick(TEntity entity)
     {

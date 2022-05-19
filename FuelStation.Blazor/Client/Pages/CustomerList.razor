@@ -32,3 +32,16 @@ else
         </RowTemplate>*@
     </EntityList>
 }
+
+@code{
+
+    [CascadingParameter] 
+    public RenderFragment PageIconsTemplate { get; set; } = @<p>This is customer</p>;
+
+    protected override void OnInitialized()
+    {
+        
+    }
+
+
+}

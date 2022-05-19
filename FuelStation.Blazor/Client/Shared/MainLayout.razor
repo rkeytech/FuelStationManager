@@ -7,10 +7,13 @@
 
     <CascadingValue Value="this">
         <main>
-            <article class="content px-4">
-                <h2>@MyPageTitle</h2>
-                @Body
-            </article>
+            <CascadingValue Value="PageIconsTemplate">
+                <article class="content px-4">
+                    <h2>@MyPageTitle</h2>
+                    <h2>@PageIconsTemplate</h2>
+                    @Body
+                </article>
+            </CascadingValue>
         </main>
     </CascadingValue>
 </div>
@@ -18,10 +21,18 @@
 @code
 {
     public string MyPageTitle { get; set; } = string.Empty;
+    [CascadingParameter]
+    public RenderFragment? PageIconsTemplate { get; set; }
 
     public void UpdateTitle(string title)
     {
         MyPageTitle = title;
+        StateHasChanged();
+    }
+
+    public void UpdatePageIcons(RenderFragment fragment)
+    {
+        PageIconsTemplate = fragment;
         StateHasChanged();
     }
 }

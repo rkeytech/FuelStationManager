@@ -2,6 +2,7 @@
 
 using System.Net.Http.Json;
 using Blazor.Shared;
+using Components;
 using Microsoft.AspNetCore.Components;
 using Shared;
 
@@ -21,10 +22,16 @@ public partial class EmployeeList
         new Tuple<string, string>("Date Started", "HireDateStart"),
         new Tuple<string, string>("Date Ended", "HireDateEnd"),
     };
+    private readonly RenderFragment _pageIconsFragment = builder =>
+    {
+        builder.OpenComponent(0, typeof(MyEmployeeFragment));
+        builder.CloseComponent();
+    };
 
     protected override async Task OnInitializedAsync()
     {
         MyLayout.UpdateTitle("Employees");
+        MyLayout.UpdatePageIcons(_pageIconsFragment);
         await LoadItemsFromServer();
         _isLoading = false;
     }

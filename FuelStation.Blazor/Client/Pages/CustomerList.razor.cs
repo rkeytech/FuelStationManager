@@ -1,6 +1,7 @@
 ﻿namespace FuelStation.Blazor.Client.Pages;
 
 using System.Net.Http.Json;
+using Components;
 using FuelStation.Blazor.Shared;
 using Microsoft.AspNetCore.Components;
 using Shared;
@@ -18,9 +19,16 @@ public partial class CustomerList
         new Tuple<string, string>("CardNumber", "CardNumber")
     };
 
+    private readonly RenderFragment _pageIconsFragment = builder =>
+    {
+        builder.OpenComponent(0, typeof(MyCustomerFragment));
+        builder.CloseComponent();
+    };
+
     protected override async Task OnInitializedAsync()
     {
         MyLayout.UpdateTitle("Customers");
+        MyLayout.UpdatePageIcons(_pageIconsFragment);
         await LoadItemsFromServer();
         _isLoading = false;
     }
